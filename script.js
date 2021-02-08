@@ -43,8 +43,23 @@ class App {
                 reject(alert('error'))
             })
         })
-}
 
+    async convertLocationData() {
+        // return longitude & latitude
+        const coords = await this.getCurrentLocation()
+        console.log(coords[0], coords[1])
+        // converting coords to address by using geocoding
+        const apiKey = 'AIzaSyD5hQYLNns7DfUnSqvsCaxT31YNerP2xxw'
+        const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords[0]},${coords[1]}&key=${apiKey}`
+        const request = await fetch(geocodingURL)
+        const data = await request.json()
+        
+        // street, city, state ; zip code, country
+        const address = data.results[4].formatted_address
+        console.log(address)
+    }
+}
 const app = new App()
 app.displayIcon()
 app.getCurrentLocation()
+app.convertLocationData()
