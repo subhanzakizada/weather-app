@@ -1,13 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Zone</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <!--  COITAINER    -->
+    <div class='container'>
+        <!-- Location -->
+        <div class='location'>
+            <span>Bellevue, WA 98004</span>
+        </div>
+
+        <!-- Time -->
+        <div class='current-time'>
+            <span>Friday 2:00 PM</span>
+        </div>
+
+        <!-- Weather Description -->
+        <div class='temperature-description'>
+            <span id='temperature-description-content'>Cloudy</span>
+        </div>
+
+        <!-- Icon -->
+        <div class=temperature-icon-container>
+            <img class='temperature-icon' src='' alt=''>
+        </div>
+
+        <!-- Temperature -->
+        <div class='temperature'>
+            <span id='temperature-degree'>30</span><span id='temperature-fahrenheit-celsius'>°F | °C</span>
+        </div>
+    </div>
+
     <!-- Script -->
     <script src="script.js"></script>
 </body>
+
 </html>

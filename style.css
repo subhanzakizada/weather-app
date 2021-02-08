@@ -1,0 +1,12 @@
+body {
+    margin: 0
+}
+
+.container {
+    border: 1px solid black;
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    margin-top: 7%;
+    padding: 20px;
+}
