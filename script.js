@@ -2,34 +2,55 @@ class App {
     constructor() {
         this.displayDataLocationAndTime()
         this.displayIcon()
+        this.displayWeatherData()
     }
-  
-    dataWeatherGlobal
 
     // Getting Weather Data -- API Url - http://api.weatherstack.com/  
     async getWeatherData() {
         try {
             // pulling out data from API
-            const request = await fetch(`http://api.weatherstack.com/current?access_key=${this.APIKEY}&query= 98004`)
+            const request = await fetch(`http://api.weatherstack.com/current?access_key=&query= 98004`)
             const data = await request.json()
-            this.dataWeatherGlobal = {
-                ...data
-            }
+            return data
         } catch (error) {
             console.log('error occured')
         }
     }
 
+    async displayWeatherData() {
+        // description and temperature elements
+        const temperatureDescriptionEl = document.getElementById('temperature-description-content')
+        const temperatureEl = document.getElementById('temperature-degree')
+
+        // weather data
+        const dataWeather = await this.getWeatherData()
+
+        let {
+            weather_descriptions, // array of data
+            temperature // in celcius
+        } = dataWeather.current
+
+        // capitalizing the first letter of every word on weather description
+        weather_descriptions[0] = weather_descriptions[0].split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+
+        // setting the temperature elements
+        temperatureDescriptionEl.textContent = `${weather_descriptions[0]}`
+        temperatureEl.textContent = `${temperature}`
+    }
+
     // display weather icon on UI
     async displayIcon() {
-        // wait for getWeatherData fn executes first and sets dataWeatherGlobal variable to data and then use that
-        await this.getWeatherData()
+        // wait for getWeatherData fn executes first and sets dataWeather variable to data and then use that
+        const dataWeather = await this.getWeatherData()
         const iconEl = document.querySelector('.temperature-icon')
         const {
-            weather_icons
-        } = this.dataWeatherGlobal.current
-        // setting the source of icon element
-        iconEl.setAttribute('src', weather_icons[0])
+            weather_icons,
+            weather_descriptions
+        } = dataWeather.current
+
+        // setting the source and alternative attributes of icon element 
+        if (weather_icons) iconEl.setAttribute('src', weather_icons[0])
+        if (weather_descriptions) iconEl.setAttribute('alt', weather_descriptions[0])
     }
 
     // Use Geolocation API to get latitude and longitude
@@ -51,11 +72,11 @@ class App {
         const coords = await this.getCurrentLocation()
 
         // converting coords to address by using Google Reverse Geocoding
-        const apiKey = APIKEY
+        const apiKey = API_KEY
         const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords[0]},${coords[1]}&key=${apiKey}`
         const request = await fetch(geocodingURL)
         const data = await request.json()
-
+        
         // getting address data ex: street, city, state ; zip code, country
         const address = await data.results[4].formatted_address
         return address
@@ -82,7 +103,7 @@ class App {
         }
         getCurrentTime()
 
-        // if second is 59 -- call helper function -- I found this easier than checking and setting (Month, Day, Hour) - each one by one
+        // if second is 59 -- call helper function -- I found this helper function easier than checking and setting (Month, Day, Hour) - each one by one
         setInterval(() => {
             if (second === 59) {
                 getCurrentTime()
@@ -98,5 +119,6 @@ class App {
         // setting the location data
         userLocation.textContent = `${location}`
     }
+
 }
 const app = new App()
