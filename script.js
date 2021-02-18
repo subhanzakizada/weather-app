@@ -9,7 +9,7 @@ class App {
     async getWeatherData() {
         try {
             // pulling out data from API
-            const request = await fetch(`http://api.weatherstack.com/current?access_key=&query= 98004`)
+            const request = await fetch(`http://api.weatherstack.com/current?access_key=${wApiKey}&query= 98004`)
             const data = await request.json()
             return data
         } catch (error) {
@@ -19,7 +19,7 @@ class App {
 
     async displayWeatherData() {
         // description and temperature elements
-        const temperatureDescriptionEl = document.getElementById('temperature-description-content')
+        const temperatureDescriptionEl = document.getElementById('temperature-description')
         const temperatureEl = document.getElementById('temperature-degree')
 
         // weather data
@@ -42,7 +42,7 @@ class App {
     async displayIcon() {
         // wait for getWeatherData fn executes first and sets dataWeather variable to data and then use that
         const dataWeather = await this.getWeatherData()
-        const iconEl = document.querySelector('.temperature-icon')
+        const iconEl = document.getElementById('temperature-icon')
         const {
             weather_icons,
             weather_descriptions
@@ -73,7 +73,7 @@ class App {
 
         // converting coords to address by using Google Reverse Geocoding
         const apiKey = API_KEY
-        const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords[0]},${coords[1]}&key=${apiKey}`
+        const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords[0]},${coords[1]}&key=${gApiKey}`
         const request = await fetch(geocodingURL)
         const data = await request.json()
         
